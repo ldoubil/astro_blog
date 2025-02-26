@@ -21,7 +21,10 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://ldoubil.githib.io/",
+  build: {
+        assets: 'r',
+    },
+  site: "https://acg-n.cn/",
   base: "/",
   trailingSlash: "always",
   integrations: [
