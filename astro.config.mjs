@@ -22,16 +22,17 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 // https://astro.build/config
 export default defineConfig({
   build: {
-        assets: 'r',
-    },
+    assets: 'r',
+
+  },
   site: "https://acg-n.cn/",
   base: "/",
   trailingSlash: "always",
   integrations: [
     tailwind(
-        {
-          nesting: true,
-        }
+      {
+        nesting: true,
+      }
     ),
     swup({
       theme: false,
@@ -119,6 +120,7 @@ export default defineConfig({
 
   vite: {
     build: {
+
       rollupOptions: {
         onwarn(warning, warn) {
           // temporarily suppress this warning
@@ -129,6 +131,11 @@ export default defineConfig({
             return;
           }
           warn(warning);
+        },
+        output: {
+          entryFileNames: 'entry.[hash].js',
+          chunkFileNames: 'chunks/chunk.[hash].js',
+          assetFileNames: 'assets/asset.[hash][extname]',
         },
       },
     },

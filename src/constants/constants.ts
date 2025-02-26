@@ -1,6 +1,6 @@
-export const UNCATEGORIZED = '__uncategorized__'
+export const UNCATEGORIZED = '__uncategorized__' // 未分类
 
-export const PAGE_SIZE = 8
+export const PAGE_SIZE = 8  // 每页的文章数量
 
 export const LIGHT_MODE = 'light',
     DARK_MODE = 'dark',
