@@ -1,3 +1,5 @@
 {
-    "github.gitProtocol": "ssh"
+    "github.gitProtocol": "ssh",
+    "go.alternateTools": {},
+    "github.gitAuthentication": true
 }
