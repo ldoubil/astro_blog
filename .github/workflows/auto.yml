@@ -1,0 +1,22 @@
+name: Webhook Listener
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger repository_dispatch event
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          TARGET_OWNER: 'ldoubil'
+          TARGET_REPO: 'ldoubil.github.io'
+        run: |
+          curl -X POST -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token $GH_TOKEN" \
+          https://api.github.com/repos/$TARGET_OWNER/$TARGET_REPO/dispatches \
+          -d '{"event_type": "manual-trigger"}'
