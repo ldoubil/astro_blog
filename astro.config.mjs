@@ -23,7 +23,6 @@ import react from '@astrojs/react';
 export default defineConfig({
   build: {
     assets: 'r',
-
   },
   site: "https://acg-n.cn/",
   base: "/",
