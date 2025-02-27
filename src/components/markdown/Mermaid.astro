@@ -1,0 +1,17 @@
+---
+export interface Props {
+    title?: string;
+}
+const { title = "" } = Astro.props;
+---
+
+<script>
+    import mermaid from "mermaid";
+</script>
+
+<figure>
+    <figcaption>{title}</figcaption>
+    <pre class="mermaid not-prose">
+    <slot />
+  </pre>
+</figure>
