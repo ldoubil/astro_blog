@@ -19,6 +19,7 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import react from '@astrojs/react';
+import rehypeMermaid from 'rehype-mermaid'
 // https://astro.build/config
 export default defineConfig({
   build: {
@@ -79,6 +80,7 @@ export default defineConfig({
     ],
     rehypePlugins: [
       rehypeKatex,
+      rehypeMermaid,
       rehypeSlug,
       [
         rehypeComponents,

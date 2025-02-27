@@ -6,6 +6,20 @@ tags: [Example, Video]
 category: Examples
 draft: false
 ---
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+[cc](/src/content/posts/markdown.md)
+
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
 
 Just copy the embed code from YouTube or other platforms, and paste it in the markdown file.
 
