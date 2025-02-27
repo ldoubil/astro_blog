@@ -15,11 +15,7 @@ graph TD;
 ```
 [cc](/src/content/posts/markdown.md)
 
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+
 
 Just copy the embed code from YouTube or other platforms, and paste it in the markdown file.
 
@@ -34,6 +30,12 @@ $ git config --global user.email johndoe@example.com
 
 <iframe width="100%" height="468" src="https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
 ```
+
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
 
 ## YouTube
 
