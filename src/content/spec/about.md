@@ -1,11 +1,10 @@
-# About
-hhhhv某呢绝不莫不我阿丽耶看咯啊开业绿他考虑突击LJL
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+# 关于
 
 ::github{repo="ldoubil/ldoubil"}
-::github{repo="saicaca/fuwari"}
+![暗色](https://raw.githubusercontent.com/ldoubil/ldoubil/output/github-contribution-grid-snake-dark.svg)
 
-> ### Sources of images used in this site
+
+<!-- > ### Sources of images used in this site
 > - [Unsplash](https://unsplash.com/)
 > - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty) -->

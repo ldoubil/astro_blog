@@ -1,20 +1,35 @@
 ---
-
-import MainGridLayout from '../layouts/MainGridLayout.astro'
-
-import { i18n } from '../i18n/translation'
-import I18nKey from '../i18n/i18nKey'
-import Markdown from '@components/misc/Markdown.astro'
-import Content from 'src/content/spec/about.md'
-
-
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
+import Markdown from "@components/misc/Markdown.astro";
+import Content from "src/content/spec/about.md";
 ---
+
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full ">
+    <div
+        class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32"
+    >
+        <div class="card-base z-10 px-9 py-6 relative w-full">
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
+            <script
+                src="https://giscus.app/client.js"
+                data-repo="ldoubil/ldoubil.github.io"
+                data-repo-id="R_kgDONvTOYA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDONvTOYM4CmY1N"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="preferred_color_scheme"
+                data-lang="zh-CN"
+                data-loading="lazy"
+                crossorigin="anonymous"
+                async></script>
         </div>
     </div>
 </MainGridLayout>
