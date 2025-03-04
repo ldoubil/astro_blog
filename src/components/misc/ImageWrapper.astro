@@ -1,50 +1,75 @@
 ---
-import path from 'path'
+import path from "path";
 interface Props {
-  id?: string
-  src: string
-  class?: string
-  alt?: string
-  position?: string
-  basePath?: string
+  id?: string;
+  src: string;
+  class?: string;
+  alt?: string;
+  position?: string;
+  basePath?: string;
 }
-import { Image } from 'astro:assets'
-import { url } from '../../utils/url-utils'
+import { Image } from "astro:assets";
+import { url } from "../../utils/url-utils";
 
-const { id, src, alt, position = 'center', basePath = '/' } = Astro.props
-const className = Astro.props.class
+const { id, src, alt, position = "center", basePath = "/" } = Astro.props;
+const className = Astro.props.class;
 
 const isLocal = !(
-  src.startsWith('/') ||
-  src.startsWith('http') ||
-  src.startsWith('https') ||
-  src.startsWith('data:')
-)
-const isPublic = src.startsWith('/')
+  src.startsWith("/") ||
+  src.startsWith("http") ||
+  src.startsWith("https") ||
+  src.startsWith("data:")
+);
+const isPublic = src.startsWith("/");
 
 // TODO temporary workaround for images dynamic import
 // https://github.com/withastro/astro/issues/3373
-let img
+// 定义一个名为 img 的变量，用于存储图片数据
+let img;
+// 如果 isLocal 为 true，则执行以下代码块
 if (isLocal) {
-  const files = import.meta.glob<ImageMetadata>('../../**', {
-    import: 'default',
-  })
+  // 使用 import.meta.glob 方法获取所有匹配的图片文件路径和元数据
+  const files = import.meta.glob<ImageMetadata>("../../**", {
+    import: "default",
+  });
+  // 规范化图片路径，使其符合操作系统的路径格式，并将其转换为相对于项目根目录的路径
   let normalizedPath = path
-    .normalize(path.join('../../', basePath, src))
-    .replace(/\\/g, '/')
-  const file = files[normalizedPath]
+    .normalize(path.join("../../", basePath, src))
+    .replace(/\\/g, "/");
+  // 从 files 对象中获取对应路径的图片文件
+  const file = files[normalizedPath];
+  // 如果没有找到对应的图片文件，则输出错误信息
   if (!file) {
-    console.error(`\n[ERROR] Image file not found: ${normalizedPath.replace('../../', 'src/')}`)
+    console.error(
+      `\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
+    );
   }
-  img = await file()
+  // 等待图片文件加载完成，并将其赋值给 img 变量
+  img = await file();
 }
 
-const imageClass = 'w-full h-full object-cover'
-const imageStyle = `object-position: ${position}`
+const imageClass = "w-full h-full object-cover";
+const imageStyle = `object-position: ${position}`;
 ---
-<div id={id} class:list={[className, 'overflow-hidden relative']}>
-    <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
-    {isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle}/>}
-    {!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle}/>}
-</div>
 
+<div id={id} class:list={[className, "overflow-hidden relative"]}>
+  <div
+    class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"
+  >
+  </div>
+  {
+    isLocal && img && (
+      <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle} />
+    )
+  }
+  {
+    !isLocal && (
+      <img
+        src={isPublic ? url(src) : src}
+        alt={alt || ""}
+        class={imageClass}
+        style={imageStyle}
+      />
+    )
+  }
+</div>
