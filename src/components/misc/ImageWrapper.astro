@@ -1,41 +1,61 @@
 ---
+// 导入 path 模块，用于处理路径
 import path from "path";
+
+/**
+ * ImageWrapper 组件的属性。
+ */
 interface Props {
-  id?: string;
-  src: string;
-  class?: string;
-  alt?: string;
-  position?: string;
-  basePath?: string;
+    // 可选的 id 属性
+    id?: string;
+    // 图片的源路径
+    src: string;
+    // 可选的 CSS 类名
+    class?: string;
+    // 可选的图片替代文本
+    alt?: string;
+    // 可选的图片位置，默认为 center
+    position?: string;
+    // 可选的基础路径，默认为 /
+    basePath?: string;
 }
+
+// 导入 Image 组件，用于处理图片
 import { Image } from "astro:assets";
+// 导入 url 工具函数，用于处理 URL
 import { url } from "../../utils/url-utils";
 
+// 解构赋值获取 Astro 组件的属性
 const { id, src, alt, position = "center", basePath = "/" } = Astro.props;
+// 获取可选的 class 属性
 const className = Astro.props.class;
 
+// 判断图片是否为本地图片
 const isLocal = !(
-  src.startsWith("/") ||
-  src.startsWith("http") ||
-  src.startsWith("https") ||
-  src.startsWith("data:")
+    src.startsWith("/") ||
+    src.startsWith("http") ||
+    src.startsWith("https") ||
+    src.startsWith("data:")
 );
+// 判断图片是否为公共图片
 const isPublic = src.startsWith("/");
 
 // TODO temporary workaround for images dynamic import
 // https://github.com/withastro/astro/issues/3373
+
 // 定义一个名为 img 的变量，用于存储图片数据
 let img;
+
 // 如果 isLocal 为 true，则执行以下代码块
 if (isLocal) {
-  // 使用 import.meta.glob 方法获取所有匹配的图片文件路径和元数据
-  const files = import.meta.glob<ImageMetadata>("../../**", {
-    import: "default",
-  });
-  // 规范化图片路径，使其符合操作系统的路径格式，并将其转换为相对于项目根目录的路径
-  let normalizedPath = path
-    .normalize(path.join("../../", basePath, src))
-    .replace(/\\/g, "/");
+    // 使用 import.meta.glob 方法获取所有匹配的图片文件路径和元数据
+    const files = import.meta.glob<ImageMetadata>("../../**", {
+        import: "default",
+    });
+    // 规范化图片路径，使其符合操作系统的路径格式，并将其转换为相对于项目根目录的路径
+    let normalizedPath = path
+        .normalize(path.join("../../", basePath, src))
+        .replace(/\\/g, "/");
   // 从 files 对象中获取对应路径的图片文件
   const file = files[normalizedPath];
   // 如果没有找到对应的图片文件，则输出错误信息

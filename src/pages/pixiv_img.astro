@@ -1,0 +1,54 @@
+---
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
+import Markdown from "@components/misc/Markdown.astro";
+import Content from "src/content/spec/about.md";
+
+var 图片列表 = [
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
+];
+---
+
+<MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
+    <div
+        id="post-cover"
+        class="w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32"
+    >
+        <div
+            class="card-base z-10 px-4 py-6 relative w-full"
+            style={{
+                display: "flex",
+                flexWrap: "wrap", // 允许换行
+                gap: "1rem", // 调整间距值
+                alignItems: "stretch",
+                padding: "1rem",
+            }}
+        >
+            {
+                图片列表.map((图片, 索引) => (
+                    <div
+                        class="relative"
+                        style={{ aspectRatio: "1/1", flex: "1 1 250px" }}
+                    >
+                        <img
+                            src={图片}
+                            alt={`图片 ${索引 + 1}`}
+                            class="rounded-[var(--radius-large)] shadow-md hover:shadow-lg transition-shadow"
+                        />
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</MainGridLayout>
