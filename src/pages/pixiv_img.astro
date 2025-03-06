@@ -5,19 +5,25 @@ import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
 import Markdown from "@components/misc/Markdown.astro";
 import Content from "src/content/spec/about.md";
+import { any, string } from "astro:schema";
+import { getCollection, z } from "astro:content";
+import { glob, file } from "astro/loaders";
+import type { List } from "mdast";
+var 图片列表: string[] = [];
 
-var 图片列表 = [
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-    "http://img.acg-n.cn/file/AgACAgUAAyEGAASSCBiNAAMmZ8k2ojwI3TLNzxKl60JR1sLOXJoAAi7BMRuMVElW2Ho-yBhRdbsBAAMCAAN5AAM2BA.png",
-];
+const dogs = await Astro.glob("src/data/img/*.json");
+// 解析json
+dogs.forEach((items) => {
+    // 解析 JSON 数据
+    const data = items.default;
+    // 遍历 JSON 数据
+    data.forEach((item: any) => {
+        console.log("Name:", item.name);
+        console.log("URL:", item.url);
+        图片列表.push(item.url);
+    });
+});
+console.log(图片列表);
 ---
 
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
