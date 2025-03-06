@@ -59,7 +59,7 @@ async function getname(): Promise<string> {
 }
 
 async function getbio(): Promise<string> {
-  const response = await fetch('https://v1.hitokoto.cn/?c=j&encode=text');
+  const response = await fetch('https://v1.hitokoto.cn/?encode=text');
   const data = await response.text();
   return data;
 }
