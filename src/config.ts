@@ -43,11 +43,11 @@ export const navBarConfig: NavBarConfig = {
     LinkPreset.Home,
     LinkPreset.Archive,
     LinkPreset.About,
-    // {
-    //   name: 'GitHub',
-    //   url: 'https://github.com/saicaca/fuwari',     // Internal links should not include the base path, as it is automatically added
-    //   external: true,                               // Show an external link icon and will open in a new tab
-    // },
+    {
+      name: '网站运行状态',
+      url: 'https://stats.uptimerobot.com/yxR9RH7QMw',     // Internal links should not include the base path, as it is automatically added
+      external: true,                               // Show an external link icon and will open in a new tab
+    },
   ],
 }
 
