@@ -10,8 +10,7 @@ import type { MarkdownHeading } from 'astro'
 import TOC from "../components/widget/TOC.astro";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import {BANNER_HEIGHT, BANNER_HEIGHT_EXTEND, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT} from "../constants/constants";
-import  SpeedInsights  from "@vercel/speed-insights/astro"
-import Analytics from '@vercel/analytics/astro'
+
 interface Props {
   title?: string
   banner?: string
@@ -28,8 +27,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url
 
 const mainPanelTop = siteConfig.banner.enable ? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)` : "5.5rem"
 ---
-<SpeedInsights/>
-<Analytics/>
+
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
 <!-- Navbar -->
