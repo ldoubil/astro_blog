@@ -15,8 +15,8 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
     name: i18n(I18nKey.archive),
     url: '/archive/',
   },
-  [LinkPreset.pixivimg]: {
-    name: "群友の宝贝",
-    url: '/pixiv_img/',
-  },
+  // [LinkPreset.pixivimg]: {
+  //   name: "群友の宝贝",
+  //   url: '/pixiv_img/',
+  // },
 }

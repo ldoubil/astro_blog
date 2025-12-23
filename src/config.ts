@@ -7,8 +7,8 @@ import type {
 import { LinkPreset } from './types/config'
 
 export const siteConfig: SiteConfig = {
-  title: '🎮百科',
-  subtitle: '游戏百科',
+  title: '未闻花名',
+  subtitle: '未闻花名',
   lang: 'zh_CN',         // 'en', 'zh_CN', 'zh_TW', 'ja', 'ko', 'es', 'th'
   themeColor: {
     hue: 250,         // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
@@ -43,7 +43,7 @@ export const navBarConfig: NavBarConfig = {
     LinkPreset.Home,
     LinkPreset.Archive,
     LinkPreset.About,
-    LinkPreset.pixivimg,
+    // LinkPreset.pixivimg,
     {
       name: '网站运行状态',
       url: 'https://stats.uptimerobot.com/yxR9RH7QMw',     // Internal links should not include the base path, as it is automatically added
@@ -52,12 +52,6 @@ export const navBarConfig: NavBarConfig = {
   ],
 }
 
-
-async function getname(): Promise<string> {
-  const response = await fetch('https://api.mmp.cc/api/qqname?qq=1806190090');
-  const data = await response.json();
-  return data.data.name;
-}
 
 async function getbio(): Promise<string> {
   const response = await fetch('https://v1.hitokoto.cn/?encode=text');
@@ -69,7 +63,7 @@ async function getbio(): Promise<string> {
 export const profileConfig: ProfileConfig = {
   avatar: 'https://q1.qlogo.cn/g?b=qq&nk=1806190090&s=640',  // Relative to the /src directory. Relative to the /public directory if it starts with '/'
   // Bug 修复：将 `getname()` 函数的返回值从 `Promise<string>` 改为 `string`
-  name: await getname(),
+  name: "kevin",
   bio: await getbio(),
   links: [
     {
