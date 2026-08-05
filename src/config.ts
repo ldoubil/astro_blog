@@ -53,18 +53,11 @@ export const navBarConfig: NavBarConfig = {
 }
 
 
-async function getbio(): Promise<string> {
-  const response = await fetch('https://v1.hitokoto.cn/?encode=text');
-  const data = await response.text();
-  return data;
-}
-
-
 export const profileConfig: ProfileConfig = {
   avatar: 'https://q1.qlogo.cn/g?b=qq&nk=1806190090&s=640',  // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-  // Bug 修复：将 `getname()` 函数的返回值从 `Promise<string>` 改为 `string`
   name: "kevin",
-  bio: await getbio(),
+  // Fallback when hitokoto request fails (Profile fetches live quote client-side)
+  bio: '未闻花名',
   links: [
     {
       name: 'QQ群',

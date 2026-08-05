@@ -1,10 +1,18 @@
-import { defineCollection, z } from 'astro:content'
+import { defineCollection } from 'astro:content'
+import { z } from 'astro/zod'
+import { glob } from 'astro/loaders'
 
 const postsCollection = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.{md,mdx}',
+    base: './src/content/posts',
+    // Keep original filename casing (default github-slugger lowercases Latin letters)
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/i, ''),
+  }),
   schema: z.object({
     title: z.string(),
-    published: z.date(),
-    updated: z.date().optional(),
+    published: z.coerce.date(),
+    updated: z.coerce.date().optional(),
     draft: z.boolean().optional().default(false),
     description: z.string().optional().default(''),
     image: z.string().optional().default(''),
@@ -19,6 +27,7 @@ const postsCollection = defineCollection({
     nextSlug: z.string().default(''),
   }),
 })
+
 export const collections = {
   posts: postsCollection,
 }

@@ -1,95 +1,140 @@
 ---
-// 导入 path 模块，用于处理路径
 import path from "path";
+import { Image } from "astro:assets";
+import { url } from "../../utils/url-utils";
 
-/**
- * ImageWrapper 组件的属性。
- */
 interface Props {
-    // 可选的 id 属性
     id?: string;
-    // 图片的源路径
     src: string;
-    // 可选的 CSS 类名
     class?: string;
-    // 可选的图片替代文本
     alt?: string;
-    // 可选的图片位置，默认为 center
     position?: string;
-    // 可选的基础路径，默认为 /
     basePath?: string;
 }
 
-// 导入 Image 组件，用于处理图片
-import { Image } from "astro:assets";
-// 导入 url 工具函数，用于处理 URL
-import { url } from "../../utils/url-utils";
-
-// 解构赋值获取 Astro 组件的属性
 const { id, src, alt, position = "center", basePath = "/" } = Astro.props;
-// 获取可选的 class 属性
 const className = Astro.props.class;
 
-// 判断图片是否为本地图片
 const isLocal = !(
     src.startsWith("/") ||
     src.startsWith("http") ||
     src.startsWith("https") ||
     src.startsWith("data:")
 );
-// 判断图片是否为公共图片
 const isPublic = src.startsWith("/");
 
 // TODO temporary workaround for images dynamic import
 // https://github.com/withastro/astro/issues/3373
+let img: ImageMetadata | undefined;
 
-// 定义一个名为 img 的变量，用于存储图片数据
-let img;
-
-// 如果 isLocal 为 true，则执行以下代码块
 if (isLocal) {
-    // 使用 import.meta.glob 方法获取所有匹配的图片文件路径和元数据
     const files = import.meta.glob<ImageMetadata>("../../**", {
         import: "default",
     });
-    // 规范化图片路径，使其符合操作系统的路径格式，并将其转换为相对于项目根目录的路径
-    let normalizedPath = path
+    const normalizedPath = path
         .normalize(path.join("../../", basePath, src))
         .replace(/\\/g, "/");
-  // 从 files 对象中获取对应路径的图片文件
-  const file = files[normalizedPath];
-  // 如果没有找到对应的图片文件，则输出错误信息
-  if (!file) {
-    console.error(
-      `\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
-    );
-  }
-  // 等待图片文件加载完成，并将其赋值给 img 变量
-  img = await file();
+    const file = files[normalizedPath];
+    if (!file) {
+        console.error(
+            `\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
+        );
+    } else {
+        img = await file();
+    }
 }
 
-const imageClass = "w-full h-full object-cover";
+const imageClass =
+    "img-el w-full h-full object-cover opacity-0 transition-opacity duration-500";
 const imageStyle = `object-position: ${position}`;
 ---
 
-<div id={id} class:list={[className, "overflow-hidden relative"]}>
-  <div
-    class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"
-  >
-  </div>
-  {
-    isLocal && img && (
-      <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle} />
-    )
-  }
-  {
-    !isLocal && (
-      <img
-        src={isPublic ? url(src) : src}
-        alt={alt || ""}
-        class={imageClass}
-        style={imageStyle}
-      />
-    )
-  }
+<div id={id} class:list={[className, "overflow-hidden relative img-wrapper"]}>
+    <div
+        class="img-skeleton absolute inset-0 z-[1] pointer-events-none overflow-hidden bg-[var(--btn-regular-bg)]"
+        aria-hidden="true"
+    >
+        <div
+            class="absolute inset-0 -translate-x-full animate-[img-shimmer_1.4s_infinite] bg-gradient-to-r from-transparent via-white/40 dark:via-white/10 to-transparent"
+        >
+        </div>
+    </div>
+    <div
+        class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none z-[2]"
+    >
+    </div>
+    {
+        isLocal && img && (
+            <Image
+                src={img}
+                alt={alt || ""}
+                class={imageClass}
+                style={imageStyle}
+                loading="lazy"
+            />
+        )
+    }
+    {
+        !isLocal && (
+            <img
+                src={isPublic ? url(src) : src}
+                alt={alt || ""}
+                class={imageClass}
+                style={imageStyle}
+                loading="lazy"
+                decoding="async"
+            />
+        )
+    }
 </div>
+
+<style is:global>
+    @keyframes img-shimmer {
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    .img-wrapper.is-loaded .img-skeleton {
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        pointer-events: none;
+    }
+
+    .img-wrapper .img-el.is-loaded {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    function markLoaded(img: HTMLImageElement) {
+        img.classList.add("is-loaded");
+        img.closest(".img-wrapper")?.classList.add("is-loaded");
+    }
+
+    function bindImage(img: HTMLImageElement) {
+        if (img.dataset.skeletonBound === "1") return;
+        img.dataset.skeletonBound = "1";
+
+        if (img.complete && img.naturalWidth > 0) {
+            markLoaded(img);
+            return;
+        }
+
+        img.addEventListener("load", () => markLoaded(img), { once: true });
+        img.addEventListener(
+            "error",
+            () => img.closest(".img-wrapper")?.classList.add("is-loaded"),
+            { once: true },
+        );
+    }
+
+    function initImageSkeletons(root: ParentNode = document) {
+        root.querySelectorAll<HTMLImageElement>(".img-wrapper .img-el").forEach(bindImage);
+    }
+
+    initImageSkeletons();
+    document.addEventListener("astro:page-load", () => initImageSkeletons());
+    document.addEventListener("swup:page:view", () => initImageSkeletons());
+    document.addEventListener("swup:content:replace", () => initImageSkeletons());
+</script>

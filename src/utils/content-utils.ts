@@ -4,11 +4,15 @@ import I18nKey from '@i18n/i18nKey'
 import { i18n } from '@i18n/translation'
 
 export async function getSortedPosts(): Promise<
-  { body: string, data: BlogPostData; slug: string }[]
+  { body?: string; data: BlogPostData; id: string; slug: string }[]
 > {
   const allBlogPosts = (await getCollection('posts', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true
-  })) as unknown as { body: string, data: BlogPostData; slug: string }[]
+  })).map(post => ({
+    ...post,
+    // Keep slug alias for existing callers (Content Layer uses id)
+    slug: post.id,
+  })) as unknown as { body?: string; data: BlogPostData; id: string; slug: string }[]
 
   const sorted = allBlogPosts.sort(
     (a: { data: BlogPostData }, b: { data: BlogPostData }) => {
@@ -36,7 +40,7 @@ export type Tag = {
 }
 
 export async function getTagList(): Promise<Tag[]> {
-  const allBlogPosts = await getCollection<'posts'>('posts', ({ data }) => {
+  const allBlogPosts = await getCollection('posts', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true
   })
 
@@ -62,7 +66,7 @@ export type Category = {
 }
 
 export async function getCategoryList(): Promise<Category[]> {
-  const allBlogPosts = await getCollection<'posts'>('posts', ({ data }) => {
+  const allBlogPosts = await getCollection('posts', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true
   })
   const count: { [key: string]: number } = {}

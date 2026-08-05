@@ -21,7 +21,13 @@ const config = profileConfig
     <div class="px-2">
         <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">{config.name}</div>
         <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2 transition"></div>
-        <div class="text-center text-neutral-400 mb-2.5 transition">{config.bio}</div>
+        <div
+            id="hitokoto-bio"
+            class="text-center text-neutral-400 mb-2.5 transition min-h-[1.25rem]"
+            data-fallback={config.bio || ''}
+        >
+            <span class="inline-block h-3 w-[70%] max-w-[12rem] rounded bg-black/10 dark:bg-white/10 animate-pulse align-middle"></span>
+        </div>
         <div class="flex gap-2 justify-center mb-1">
             {config.links.length > 1 && config.links.map(item =>
                     <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
@@ -37,3 +43,26 @@ const config = profileConfig
     </div>
 </div>
 
+<script>
+    async function loadHitokoto() {
+        const el = document.getElementById('hitokoto-bio')
+        if (!el) return
+
+        const fallback = el.dataset.fallback || '未闻花名'
+        try {
+            const controller = new AbortController()
+            const timer = setTimeout(() => controller.abort(), 4000)
+            const res = await fetch('https://v1.hitokoto.cn/?encode=text', {
+                signal: controller.signal,
+            })
+            clearTimeout(timer)
+            if (!res.ok) throw new Error(`hitokoto ${res.status}`)
+            const text = (await res.text()).trim()
+            el.textContent = text || fallback
+        } catch {
+            el.textContent = fallback
+        }
+    }
+
+    loadHitokoto()
+</script>

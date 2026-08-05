@@ -1,60 +1,52 @@
 ---
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
-import Markdown from "@components/misc/Markdown.astro";
-import Content from "src/content/spec/about.md";
-import { any, string } from "astro:schema";
-import { getCollection, z } from "astro:content";
-import { glob, file } from "astro/loaders";
-import type { List } from "mdast";
-var 图片列表: string[] = [];
 
-const dogs = await Astro.glob("src/data/img/*.json");
-// 解析json
-dogs.forEach((items) => {
-    // 解析 JSON 数据
-    const data = items.default;
-    // 遍历 JSON 数据
-    data.forEach((item: any) => {
-        console.log("Name:", item.name);
-        console.log("URL:", item.url);
-        图片列表.push(item.url);
-    });
-});
-console.log(图片列表);
+const imageModules = import.meta.glob<{ default: { name: string; url: string }[] }>(
+	"../data/img/*.json",
+	{ eager: true },
+);
+
+const 图片列表: string[] = [];
+for (const mod of Object.values(imageModules)) {
+	const data = mod.default;
+	if (!Array.isArray(data)) continue;
+	for (const item of data) {
+		图片列表.push(item.url);
+	}
+}
 ---
 
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
-    <div
-        id="post-cover"
-        class="w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32"
-    >
-        <div
-            class="card-base z-10 px-4 py-6 relative w-full"
-            style={{
-                display: "flex",
-                flexWrap: "wrap", // 允许换行
-                gap: "1rem", // 调整间距值
-                alignItems: "stretch",
-                padding: "1rem",
-            }}
-        >
-            {
-                图片列表.map((图片, 索引) => (
-                    <div
-                        class="relative"
-                        style={{ aspectRatio: "1/1", flex: "1 1 250px" }}
-                    >
-                        <img
-                            src={图片}
-                            alt={`图片 ${索引 + 1}`}
-                            class="rounded-[var(--radius-large)] shadow-md hover:shadow-lg transition-shadow"
-                        />
-                    </div>
-                ))
-            }
-        </div>
-    </div>
+	<div
+		id="post-cover"
+		class="w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32"
+	>
+		<div
+			class="card-base z-10 px-4 py-6 relative w-full"
+			style={{
+				display: "flex",
+				flexWrap: "wrap",
+				gap: "1rem",
+				alignItems: "stretch",
+				padding: "1rem",
+			}}
+		>
+			{
+				图片列表.map((图片, 索引) => (
+					<div
+						class="relative"
+						style={{ aspectRatio: "1/1", flex: "1 1 250px" }}
+					>
+						<img
+							src={图片}
+							alt={`图片 ${索引 + 1}`}
+							class="rounded-[var(--radius-large)] shadow-md hover:shadow-lg transition-shadow"
+						/>
+					</div>
+				))
+			}
+		</div>
+	</div>
 </MainGridLayout>

@@ -1,6 +1,7 @@
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
+import { unified } from "@astrojs/markdown-remark";
 import swup from "@swup/astro";
 import Compress from "astro-compress";
 import icon from "astro-icon";
@@ -18,21 +19,22 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
-import react from '@astrojs/react';
+import react from "@astrojs/react";
+
 // https://astro.build/config
 export default defineConfig({
   build: {
-    assets: 'r',
+    assets: "r",
   },
   site: "https://acg-n.cn/",
   base: "/",
   trailingSlash: "always",
+  // Keep previous HTML whitespace behavior for inline elements
+  compressHTML: true,
   integrations: [
-    tailwind(
-      {
-        nesting: true,
-      }
-    ),
+    tailwind({
+      nesting: true,
+    }),
     swup({
       theme: false,
       animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
@@ -64,63 +66,67 @@ export default defineConfig({
         Passed: async () => true, // https://github.com/PlayForm/Compress/issues/376
       },
     }),
-    react()
+    react(),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkMath,
-      remarkReadingTime,
-      remarkExcerpt,
-      remarkGithubAdmonitionsToDirectives,
-      remarkDirective,
-      remarkSectionize,
-      parseDirectiveNode,
-    ],
-    rehypePlugins: [
-      rehypeKatex,
-      rehypeSlug,
-      [
-        rehypeComponents,
-        {
-          components: {
-            github: GithubCardComponent,
-            note: (x, y) => AdmonitionComponent(x, y, "note"),
-            tip: (x, y) => AdmonitionComponent(x, y, "tip"),
-            important: (x, y) => AdmonitionComponent(x, y, "important"),
-            caution: (x, y) => AdmonitionComponent(x, y, "caution"),
-            warning: (x, y) => AdmonitionComponent(x, y, "warning"),
-          },
-        },
+    // Keep remark/rehype plugins on the unified pipeline (Astro 7 default is Sätteri)
+    processor: unified({
+      remarkPlugins: [
+        remarkMath,
+        remarkReadingTime,
+        remarkExcerpt,
+        remarkGithubAdmonitionsToDirectives,
+        remarkDirective,
+        remarkSectionize,
+        parseDirectiveNode,
       ],
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: {
-            className: ["anchor"],
-          },
-          content: {
-            type: "element",
-            tagName: "span",
-            properties: {
-              className: ["anchor-icon"],
-              "data-pagefind-ignore": true,
+      rehypePlugins: [
+        rehypeKatex,
+        rehypeSlug,
+        [
+          rehypeComponents,
+          {
+            components: {
+              github: GithubCardComponent,
+              note: (x, y) => AdmonitionComponent(x, y, "note"),
+              tip: (x, y) => AdmonitionComponent(x, y, "tip"),
+              important: (x, y) => AdmonitionComponent(x, y, "important"),
+              caution: (x, y) => AdmonitionComponent(x, y, "caution"),
+              warning: (x, y) => AdmonitionComponent(x, y, "warning"),
             },
-            children: [
-              {
-                type: "text",
-                value: "#",
-              },
-            ],
           },
-        },
+        ],
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            properties: {
+              className: ["anchor"],
+            },
+            content: {
+              type: "element",
+              tagName: "span",
+              properties: {
+                className: ["anchor-icon"],
+                "data-pagefind-ignore": true,
+              },
+              children: [
+                {
+                  type: "text",
+                  value: "#",
+                },
+              ],
+            },
+          },
+        ],
       ],
-    ],
+    }),
   },
 
   vite: {
     build: {
-
+      // Vite 8 defaults to lightningcss minify, which fails on nested `&` from Stylus/PostCSS
+      cssMinify: "esbuild",
       rollupOptions: {
         onwarn(warning, warn) {
           // temporarily suppress this warning
@@ -133,9 +139,9 @@ export default defineConfig({
           warn(warning);
         },
         output: {
-          entryFileNames: 'entry.[hash].js',
-          chunkFileNames: 'chunks/chunk.[hash].js',
-          assetFileNames: 'assets/asset.[hash][extname]',
+          entryFileNames: "entry.[hash].js",
+          chunkFileNames: "chunks/chunk.[hash].js",
+          assetFileNames: "assets/asset.[hash][extname]",
         },
       },
     },
