@@ -10,6 +10,7 @@ export const ja: Translation = {
   [Key.tags]: 'タグ',
   [Key.categories]: 'カテゴリ',
   [Key.recentPosts]: '最近の投稿',
+  [Key.calendar]: 'アーカイブ',
 
   [Key.comments]: 'コメント',
 

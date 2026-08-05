@@ -5,7 +5,9 @@ import "@fontsource/roboto/700.css";
 
 import { profileConfig, siteConfig } from "@/config";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import FallingPetals from "@components/FallingPetals.astro";
 import GlobalStyles from "@components/GlobalStyles.astro";
+import ReadingProgress from "@components/ReadingProgress.astro";
 import {
 	AUTO_MODE,
 	BANNER_HEIGHT,
@@ -199,6 +201,8 @@ const bannerOffset =
 	>
 		<GlobalStyles />
 		<ConfigCarrier />
+		<ReadingProgress />
+		<FallingPetals />
 		<slot />
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
@@ -245,7 +249,6 @@ const bannerOffset =
 </style>
 
 <script>
-	import "overlayscrollbars/overlayscrollbars.css";
 	import {
 		OverlayScrollbars,
 		// ScrollbarsHidingPlugin,
@@ -353,26 +356,38 @@ function disableAnimation() {
 	function initCustomScrollbar() {
 		const bodyElement = document.querySelector("body");
 		if (!bodyElement) return;
-		OverlayScrollbars(
-			// docs say that a initialization to the body element would affect native functionality like window.scrollTo
-			// but just leave it here for now
-			{
-				target: bodyElement,
-				cancel: {
-					nativeScrollbarsOverlaid: true, // don't initialize the overlay scrollbar if there is a native one
-				},
+
+		const bodyOptions = {
+			scrollbars: {
+				theme: "scrollbar-base scrollbar-auto py-1",
+				autoHide: "move" as const,
+				autoHideDelay: 500,
+				autoHideSuspend: false,
 			},
-			{
-				scrollbars: {
-					theme: "scrollbar-base scrollbar-auto py-1",
-					autoHide: "move",
-					autoHideDelay: 500,
-					autoHideSuspend: false,
+		};
+
+		const existingBody = OverlayScrollbars(bodyElement);
+		if (existingBody) {
+			existingBody.update(true);
+		} else {
+			OverlayScrollbars(
+				// docs say that a initialization to the body element would affect native functionality like window.scrollTo
+				// but just leave it here for now
+				{
+					target: bodyElement,
+					cancel: {
+						// Keep custom scrollbars even on Windows overlay scrollbar systems.
+						// Re-init after Swup used to cancel here and fall back to native.
+						nativeScrollbarsOverlaid: false,
+					},
 				},
-			},
-		);
+				bodyOptions,
+			);
+		}
+
 		const preElements = document.querySelectorAll("pre");
 		preElements.forEach((ele) => {
+			if (OverlayScrollbars(ele)) return;
 			OverlayScrollbars(ele, {
 				scrollbars: {
 					theme: "scrollbar-base scrollbar-dark px-2",
@@ -386,6 +401,7 @@ function disableAnimation() {
 			".katex-display",
 		) as NodeListOf<HTMLElement>;
 		katexElements.forEach((ele) => {
+			if (OverlayScrollbars(ele)) return;
 			OverlayScrollbars(ele, {
 				scrollbars: {
 					theme: "scrollbar-base scrollbar-auto py-1",
@@ -452,6 +468,7 @@ function disableAnimation() {
 			}
 		});
 		window.swup.hooks.on("content:replace", initCustomScrollbar);
+		window.swup.hooks.on("page:view", initCustomScrollbar);
 		window.swup.hooks.on(
 			"visit:start",
 			(visit: { to: { url: string } }) => {

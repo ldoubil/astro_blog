@@ -1,0 +1,71 @@
+---
+---
+
+<script>
+	const RING_LEN = 182.2; // 2 * PI * 29
+
+	function getScrollRoot() {
+		const scrolling = document.querySelector(
+			"[data-overlayscrollbars-viewport]",
+		) as HTMLElement | null;
+		return scrolling || document.documentElement;
+	}
+
+	function updateReadingProgress() {
+		const ringBar = document.getElementById(
+			"reading-progress-ring",
+		) as SVGCircleElement | null;
+		if (!ringBar) return;
+
+		const root = getScrollRoot();
+		const scrollTop =
+			root === document.documentElement
+				? window.scrollY || document.documentElement.scrollTop
+				: root.scrollTop;
+		const viewportH =
+			root === document.documentElement ? window.innerHeight : root.clientHeight;
+		const scrollHeight =
+			(root === document.documentElement
+				? document.documentElement.scrollHeight
+				: root.scrollHeight) - viewportH;
+
+		const progress =
+			scrollHeight > 0
+				? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100))
+				: 0;
+
+		ringBar.style.strokeDashoffset = String(RING_LEN * (1 - progress / 100));
+	}
+
+	let boundRoot: HTMLElement | Window | null = null;
+
+	function bindProgress() {
+		const root = getScrollRoot();
+		const target: HTMLElement | Window =
+			root === document.documentElement ? window : root;
+
+		if (boundRoot && boundRoot !== target) {
+			boundRoot.removeEventListener(
+				"scroll",
+				updateReadingProgress as EventListener,
+			);
+		}
+
+		target.addEventListener("scroll", updateReadingProgress, { passive: true });
+		boundRoot = target;
+		updateReadingProgress();
+	}
+
+	bindProgress();
+	setTimeout(bindProgress, 100);
+	setTimeout(bindProgress, 500);
+	window.addEventListener("resize", updateReadingProgress, { passive: true });
+	document.addEventListener("swup:page:view", () => {
+		requestAnimationFrame(bindProgress);
+		setTimeout(bindProgress, 100);
+	});
+	document.addEventListener("swup:content:replace", () => {
+		requestAnimationFrame(bindProgress);
+		setTimeout(bindProgress, 100);
+	});
+</script>

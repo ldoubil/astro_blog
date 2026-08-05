@@ -1,0 +1,130 @@
+---
+import WidgetLayout from './WidgetLayout.astro'
+import { getSortedPosts } from '../../utils/content-utils'
+import { url } from '../../utils/url-utils'
+import { i18n } from '../../i18n/translation'
+import I18nKey from '../../i18n/i18nKey'
+
+const posts = await getSortedPosts()
+
+function toLocalYMD(d: Date) {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+// Build YYYY-MM -> posts map
+const monthMap = new Map<string, typeof posts>()
+for (const post of posts) {
+  const d = new Date(post.data.published)
+  const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  if (!monthMap.has(key)) monthMap.set(key, [])
+  monthMap.get(key)!.push(post)
+}
+
+const months = [...monthMap.keys()].sort((a, b) => (a < b ? 1 : -1))
+const activeKey = months[0] || (() => {
+  const now = new Date()
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+})()
+
+const [activeYear, activeMonth] = activeKey.split('-').map(Number)
+const daysInMonth = new Date(activeYear, activeMonth, 0).getDate()
+const firstWeekday = new Date(activeYear, activeMonth - 1, 1).getDay() // 0=Sun
+
+const dayPosts = new Map<number, typeof posts>()
+for (const post of monthMap.get(activeKey) || []) {
+  const day = new Date(post.data.published).getDate()
+  if (!dayPosts.has(day)) dayPosts.set(day, [])
+  dayPosts.get(day)!.push(post)
+}
+
+const cells: ({ type: 'empty' } | { type: 'day'; day: number; posts: typeof posts; dateKey: string })[] = []
+for (let i = 0; i < firstWeekday; i++) cells.push({ type: 'empty' })
+for (let day = 1; day <= daysInMonth; day++) {
+  const dateKey = `${activeYear}-${String(activeMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  cells.push({ type: 'day', day, posts: dayPosts.get(day) || [], dateKey })
+}
+
+const weekLabels = ['日', '一', '二', '三', '四', '五', '六']
+const monthLabel = `${activeYear} 年 ${activeMonth} 月`
+
+interface Props {
+  class?: string
+  style?: string
+}
+const className = Astro.props.class
+const style = Astro.props.style
+---
+
+<WidgetLayout
+  name={i18n(I18nKey.calendar)}
+  id="archive-calendar"
+  class={className}
+  style={style}
+>
+  <div class="mb-2 flex items-center justify-between px-1">
+    <div class="text-sm font-medium text-75">{monthLabel}</div>
+    <a href={url('/archive/')} class="text-xs text-50 hover:text-[var(--primary)] transition">
+      {i18n(I18nKey.archive)}
+    </a>
+  </div>
+
+  <div class="grid grid-cols-7 gap-1 text-center mb-1">
+    {
+      weekLabels.map(w => (
+        <div class="text-[0.65rem] text-50 py-0.5">{w}</div>
+      ))
+    }
+  </div>
+
+  <div class="grid grid-cols-7 gap-1 text-center">
+    {
+      cells.map(cell => {
+        if (cell.type === 'empty') {
+          return <div class="aspect-square" />
+        }
+        const hasPosts = cell.posts.length > 0
+
+        if (hasPosts) {
+          return (
+            <a
+              href={url(`/archive/date/${cell.dateKey}/`)}
+              title={`${cell.dateKey} · ${cell.posts.length} 篇`}
+              class:list={[
+                'aspect-square rounded-md text-xs flex items-center justify-center transition',
+                'bg-[var(--btn-regular-bg)] text-[var(--btn-content)] hover:bg-[var(--btn-regular-bg-hover)] font-medium',
+              ]}
+            >
+              {cell.day}
+            </a>
+          )
+        }
+
+        return (
+          <div class="aspect-square rounded-md text-xs flex items-center justify-center text-50">
+            {cell.day}
+          </div>
+        )
+      })
+    }
+  </div>
+
+  {
+    months.length > 1 && (
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        {months.slice(0, 6).map(key => {
+          const count = monthMap.get(key)?.length || 0
+          const [y, m] = key.split('-')
+          return (
+            <span class="text-[0.7rem] text-50 px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/5">
+              {y}-{m}
+              <span class="ml-1 text-[var(--primary)]">{count}</span>
+            </span>
+          )
+        })}
+      </div>
+    )
+  }
+</WidgetLayout>
