@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/posts/MD语法.md",
+                "file": "src/content/moments/scrollbar.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "MD语法"
+              "title": "scrollbar"
             }
           }
         ]
@@ -117,7 +117,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "src/content/posts/MD语法.md",
+            "file": "src/content/moments/scrollbar.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -175,9 +175,10 @@
   },
   "active": "db604632649acbb4",
   "lastOpenFiles": [
+    "src/content/posts/cover.webp",
+    "src/content/posts/MD语法.md",
     "src/content/moments/scrollbar.md",
     "src/assets/images/1786327325699.jpeg",
-    "src/content/posts/MD语法.md",
     "src/pages/moments/index.astro",
     "src/pages/moments",
     "src/pages/friends.astro",
@@ -189,7 +190,6 @@
     "src/components/MomentCard.astro",
     "src/components/CuteToast.astro",
     "src/content/spec/about.md",
-    "src/content/posts/cover.webp",
     "Screenshot_2026-08-10-20-15-08-346_fan.astral.next.game.jpg"
   ]
 }
