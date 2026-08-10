@@ -175,9 +175,21 @@
   },
   "active": "db604632649acbb4",
   "lastOpenFiles": [
+    "src/content/moments/scrollbar.md",
+    "src/assets/images/1786327325699.jpeg",
+    "src/content/posts/MD语法.md",
+    "src/pages/moments/index.astro",
+    "src/pages/moments",
+    "src/pages/friends.astro",
+    "src/pages/404.astro",
+    "src/content/moments",
+    "src/components/widget/MobileTOC.astro",
+    "src/components/widget/DailyFortune.astro",
+    "src/components/ThemeTransition.astro",
+    "src/components/MomentCard.astro",
+    "src/components/CuteToast.astro",
     "src/content/spec/about.md",
     "src/content/posts/cover.webp",
-    "src/content/posts/MD语法.md",
     "Screenshot_2026-08-10-20-15-08-346_fan.astral.next.game.jpg"
   ]
 }
