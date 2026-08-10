@@ -28,6 +28,19 @@ const postsCollection = defineCollection({
   }),
 })
 
+const momentsCollection = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.{md,mdx}',
+    base: './src/content/moments',
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/i, ''),
+  }),
+  schema: z.object({
+    published: z.coerce.date(),
+    draft: z.boolean().optional().default(false),
+  }),
+})
+
 export const collections = {
   posts: postsCollection,
+  moments: momentsCollection,
 }

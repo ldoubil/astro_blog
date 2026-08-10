@@ -8,6 +8,8 @@ import Search from './Search.svelte'
 import { LinkPresets } from '../constants/link-presets'
 import LightDarkSwitch from './LightDarkSwitch.svelte'
 import { url } from '../utils/url-utils'
+import I18nKey from '../i18n/i18nKey'
+import { i18n } from '../i18n/translation'
 const className = Astro.props.class
 
 let links: NavBarLink[] = navBarConfig.links.map(
@@ -45,6 +47,14 @@ let links: NavBarLink[] = navBarConfig.links.map(
         <div class="flex">
             <!--<SearchPanel client:load>-->
             <Search client:only="svelte"></Search>
+            <a
+                href={url('/rss.xml')}
+                aria-label={i18n(I18nKey.rss)}
+                title={i18n(I18nKey.rss)}
+                class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90"
+            >
+                <Icon name="fa6-solid:rss" class="text-[1.15rem]"></Icon>
+            </a>
             {!siteConfig.themeColor.fixed && (
                     <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
                         <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>

@@ -5,6 +5,7 @@ export const zh_CN: Translation = {
   [Key.home]: '主页',
   [Key.about]: '关于',
   [Key.archive]: '归档',
+  [Key.friends]: '友链',
   [Key.search]: '搜索',
 
   [Key.tags]: '标签',
@@ -36,4 +37,18 @@ export const zh_CN: Translation = {
   [Key.author]: '作者',
   [Key.publishedAt]: '发布于',
   [Key.license]: '许可协议',
+
+  [Key.friendsEmpty]: '还没有友链，快来交换吧～',
+  [Key.notFound]: '页面走丢了',
+  [Key.notFoundHint]: '这里空空如也，不如回首页看看？',
+  [Key.backHome]: '返回首页',
+  [Key.backToArchive]: '返回归档',
+  [Key.searchDevHint]: '开发环境暂不可用搜索',
+  [Key.searchDevHintDetail]: '正式构建后可用：npm run build && npm run preview',
+  [Key.moments]: '动态',
+  [Key.momentsEmpty]: '还没有动态，先写一条吧～',
+  [Key.siteUptime]: '已运行 {days} 天',
+  [Key.rss]: 'RSS 订阅',
+  [Key.toc]: '目录',
+  [Key.fortune]: '今日小签',
 }

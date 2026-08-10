@@ -1,0 +1,61 @@
+---
+import { render } from 'astro:content'
+import Markdown from './misc/Markdown.astro'
+import { Icon } from 'astro-icon/components'
+import I18nKey from '../i18n/i18nKey'
+import { i18n } from '../i18n/translation'
+import { formatDateToYYYYMMDD } from '../utils/date-utils'
+
+interface Props {
+  class?: string
+  entry: any
+  published: Date
+  style?: string
+}
+
+const { entry, published, style } = Astro.props
+const className = Astro.props.class
+const { Content } = await render(entry)
+---
+
+<article
+  id={`moment-${entry.id}`}
+  class:list={[
+    'card-base w-full rounded-[var(--radius-large)] overflow-hidden relative',
+    className,
+  ]}
+  style={style}
+>
+  <div class="px-6 md:px-9 pt-5 md:pt-6 pb-5">
+    <div class="flex items-center gap-2 mb-3 text-xs">
+      <span
+        class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-medium
+          bg-[var(--btn-regular-bg)] text-[var(--primary)]"
+      >
+        <Icon name="material-symbols:chat-bubble-outline-rounded" class="text-sm" />
+        {i18n(I18nKey.moments)}
+      </span>
+      <time
+        datetime={published.toISOString()}
+        class="text-black/40 dark:text-white/40 font-medium"
+      >
+        {formatDateToYYYYMMDD(published)}
+      </time>
+    </div>
+
+    <div class="moment-card-body text-black/75 dark:text-white/75 leading-relaxed">
+      <Markdown class="moment-md">
+        <Content />
+      </Markdown>
+    </div>
+  </div>
+</article>
+
+<style is:global>
+  .moment-card-body .custom-md > :first-child {
+    margin-top: 0;
+  }
+  .moment-card-body .custom-md > :last-child {
+    margin-bottom: 0;
+  }
+</style>

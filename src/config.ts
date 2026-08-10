@@ -1,4 +1,5 @@
 import type {
+  FriendsConfig,
   LicenseConfig,
   NavBarConfig,
   ProfileConfig,
@@ -8,8 +9,9 @@ import { LinkPreset } from './types/config'
 
 export const siteConfig: SiteConfig = {
   title: '未闻花名',
-  subtitle: '未闻花名',
+  subtitle: '记录与分享',
   lang: 'zh_CN',         // 'en', 'zh_CN', 'zh_TW', 'ja', 'ko', 'es', 'th'
+  siteStartDate: '2024-01-01',
   themeColor: {
     hue: 250,         // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
     fixed: true,     // Hide the theme color picker for visitors
@@ -42,12 +44,32 @@ export const navBarConfig: NavBarConfig = {
   links: [
     LinkPreset.Home,
     LinkPreset.Archive,
+    LinkPreset.Moments,
+    LinkPreset.Friends,
     LinkPreset.About,
     {
       name: '网站运行状态',
       url: 'https://stats.uptimerobot.com/yxR9RH7QMw',     // Internal links should not include the base path, as it is automatically added
       external: true,                               // Show an external link icon and will open in a new tab
     },
+  ],
+}
+
+export const friendsConfig: FriendsConfig = {
+  description: '欢迎互换友链～留下脚印再走吧',
+  links: [
+    {
+      name: '未闻花名',
+      url: 'https://acg-n.cn/',
+      avatar: 'https://q1.qlogo.cn/g?b=qq&nk=1806190090&s=640',
+      description: '本站',
+    },
+    // {
+    //   name: '友站名称',
+    //   url: 'https://example.com/',
+    //   avatar: 'https://example.com/avatar.png',
+    //   description: '一句话介绍',
+    // },
   ],
 }
 

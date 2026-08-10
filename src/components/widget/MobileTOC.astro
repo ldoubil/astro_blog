@@ -1,0 +1,128 @@
+---
+import type { MarkdownHeading } from 'astro'
+import { Icon } from 'astro-icon/components'
+import { siteConfig } from '../../config'
+import I18nKey from '../../i18n/i18nKey'
+import { i18n } from '../../i18n/translation'
+
+interface Props {
+  headings: MarkdownHeading[]
+}
+
+const { headings = [] } = Astro.props
+const show = siteConfig.toc.enable && headings.length > 0
+
+const removeTailingHash = (text: string) => {
+  const lastIndexOfHash = text.lastIndexOf('#')
+  if (lastIndexOfHash !== text.length - 1) return text
+  return text.substring(0, lastIndexOfHash)
+}
+
+let minDepth = 10
+for (const heading of headings) {
+  minDepth = Math.min(minDepth, heading.depth)
+}
+const maxLevel = siteConfig.toc.depth
+const visible = headings.filter((h) => h.depth < minDepth + maxLevel)
+---
+
+{show && (
+  <div id="mobile-toc" class="2xl:hidden">
+    <button
+      id="mobile-toc-btn"
+      type="button"
+      aria-label={i18n(I18nKey.toc)}
+      aria-expanded="false"
+      aria-controls="mobile-toc-panel"
+      class="fixed z-[60] bottom-6 right-5 btn-card w-12 h-12 rounded-full shadow-lg flex items-center justify-center active:scale-95"
+    >
+      <Icon name="material-symbols:list-rounded" class="text-[1.5rem] text-[var(--primary)]" />
+    </button>
+
+    <div
+      id="mobile-toc-backdrop"
+      class="fixed inset-0 z-[70] bg-black/40 opacity-0 pointer-events-none transition-opacity duration-200"
+      aria-hidden="true"
+    ></div>
+
+    <div
+      id="mobile-toc-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-label={i18n(I18nKey.toc)}
+      class="fixed z-[80] inset-x-0 bottom-0 max-h-[70vh] rounded-t-2xl bg-[var(--float-panel-bg)]
+        shadow-2xl translate-y-full transition-transform duration-300 ease-out flex flex-col"
+    >
+      <div class="flex items-center justify-between px-5 pt-4 pb-2 shrink-0">
+        <div class="font-bold text-black/80 dark:text-white/80">{i18n(I18nKey.toc)}</div>
+        <button
+          id="mobile-toc-close"
+          type="button"
+          aria-label="Close"
+          class="btn-plain rounded-lg w-9 h-9 flex items-center justify-center"
+        >
+          <Icon name="material-symbols:close-rounded" class="text-[1.25rem]" />
+        </button>
+      </div>
+      <div class="overflow-y-auto px-3 pb-8 overscroll-contain">
+        <nav class="flex flex-col gap-0.5">
+          {visible.map((heading) => (
+            <a
+              href={`#${heading.slug}`}
+              class="mobile-toc-link px-3 py-2.5 rounded-xl text-sm text-black/70 dark:text-white/70
+                hover:bg-[var(--btn-plain-bg-hover)] hover:text-[var(--primary)] transition"
+              style={`padding-left: ${0.75 + (heading.depth - minDepth) * 0.85}rem`}
+            >
+              {removeTailingHash(heading.text)}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </div>
+  </div>
+)}
+
+<script>
+  function setupMobileToc() {
+    const root = document.getElementById('mobile-toc')
+    if (!root) return
+
+    const btn = document.getElementById('mobile-toc-btn')
+    const panel = document.getElementById('mobile-toc-panel')
+    const backdrop = document.getElementById('mobile-toc-backdrop')
+    const closeBtn = document.getElementById('mobile-toc-close')
+    if (!btn || !panel || !backdrop) return
+
+    const open = () => {
+      panel.classList.remove('translate-y-full')
+      backdrop.classList.remove('opacity-0', 'pointer-events-none')
+      btn.setAttribute('aria-expanded', 'true')
+      document.documentElement.style.overflow = 'hidden'
+    }
+
+    const close = () => {
+      panel.classList.add('translate-y-full')
+      backdrop.classList.add('opacity-0', 'pointer-events-none')
+      btn.setAttribute('aria-expanded', 'false')
+      document.documentElement.style.overflow = ''
+    }
+
+    btn.onclick = () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true'
+      if (expanded) close()
+      else open()
+    }
+    closeBtn && (closeBtn.onclick = close)
+    backdrop.onclick = close
+
+    root.querySelectorAll('.mobile-toc-link').forEach((link) => {
+      link.addEventListener('click', () => close())
+    })
+  }
+
+  setupMobileToc()
+  document.addEventListener('swup:page:view', setupMobileToc)
+  document.addEventListener('swup:enable', () => {
+    window.swup?.hooks?.on?.('page:view', setupMobileToc)
+  })
+</script>

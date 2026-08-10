@@ -2,6 +2,7 @@ enum I18nKey {
   home = 'home',
   about = 'about',
   archive = 'archive',
+  friends = 'friends',
   search = 'search',
 
   tags = 'tags',
@@ -33,6 +34,21 @@ enum I18nKey {
   author = 'author',
   publishedAt = 'publishedAt',
   license = 'license',
+
+  friendsEmpty = 'friendsEmpty',
+  notFound = 'notFound',
+  notFoundHint = 'notFoundHint',
+  backHome = 'backHome',
+  backToArchive = 'backToArchive',
+  searchDevHint = 'searchDevHint',
+  searchDevHintDetail = 'searchDevHintDetail',
+
+  moments = 'moments',
+  momentsEmpty = 'momentsEmpty',
+  siteUptime = 'siteUptime',
+  rss = 'rss',
+  toc = 'toc',
+  fortune = 'fortune',
 }
 
 export default I18nKey
