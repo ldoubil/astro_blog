@@ -1,0 +1,35 @@
+---
+import MainGridLayout from '../layouts/MainGridLayout.astro'
+import I18nKey from '../i18n/i18nKey'
+import { i18n } from '../i18n/translation'
+import { url } from '../utils/url-utils'
+---
+
+<MainGridLayout title={i18n(I18nKey.notFound)} description={i18n(I18nKey.notFoundHint)}>
+  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-6 md:px-9 py-16 relative w-full text-center">
+      <div class="not-found-code text-[clamp(4.5rem,18vw,8rem)] font-bold leading-none text-[var(--primary)] opacity-90 onload-animation">
+        404
+      </div>
+      <h1 class="mt-4 text-xl md:text-2xl font-bold text-black/85 dark:text-white/85 onload-animation">
+        {i18n(I18nKey.notFound)}
+      </h1>
+      <p class="mt-2 text-black/50 dark:text-white/50 onload-animation">
+        {i18n(I18nKey.notFoundHint)}
+      </p>
+      <a
+        href={url('/')}
+        class="inline-flex items-center justify-center mt-8 px-5 h-11 rounded-full font-medium text-white bg-[var(--primary)] hover:opacity-90 active:scale-95 transition onload-animation"
+      >
+        {i18n(I18nKey.backHome)}
+      </a>
+    </div>
+  </div>
+</MainGridLayout>
+
+<style is:global>
+  .not-found-code {
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 40px color-mix(in oklch, var(--primary) 35%, transparent);
+  }
+</style>

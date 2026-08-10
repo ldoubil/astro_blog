@@ -10,3 +10,13 @@
 .pswp__button--close {
     @apply mr-4 !important;
 }
+.pswp__button--arrow--prev,
+.pswp__button--arrow--next {
+    @apply rounded-xl !important;
+}
+.pswp__counter {
+    @apply text-white/90 text-sm font-medium tracking-wide !important;
+    margin-top: 1.1rem !important;
+    margin-left: 1rem !important;
+    opacity: 1 !important;
+}

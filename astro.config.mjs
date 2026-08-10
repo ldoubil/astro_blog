@@ -32,7 +32,7 @@ export default defineConfig({
   },
   site: "https://acg-n.cn/",
   base: "/",
-  trailingSlash: "always",
+  trailingSlash: "ignore",
   // Keep previous HTML whitespace behavior for inline elements
   compressHTML: true,
   integrations: [

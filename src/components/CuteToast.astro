@@ -1,0 +1,86 @@
+---
+---
+
+<style is:global>
+	.cute-toast-host {
+		position: fixed;
+		left: 50%;
+		bottom: 2.25rem;
+		transform: translateX(-50%);
+		z-index: 100001;
+		pointer-events: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.cute-toast {
+		padding: 0.55rem 1rem;
+		border-radius: 9999px;
+		background: color-mix(in oklch, var(--card-bg) 88%, var(--primary));
+		color: var(--primary);
+		font-size: 0.9rem;
+		font-weight: 600;
+		box-shadow: 0 8px 28px color-mix(in oklch, var(--primary) 18%, transparent);
+		opacity: 0;
+		transform: translateY(10px) scale(0.96);
+		animation: cute-toast-in 0.28s ease forwards;
+	}
+
+	.cute-toast.is-out {
+		animation: cute-toast-out 0.25s ease forwards;
+	}
+
+	@keyframes cute-toast-in {
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@keyframes cute-toast-out {
+		to {
+			opacity: 0;
+			transform: translateY(8px) scale(0.96);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cute-toast {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	function ensureHost() {
+		let host = document.querySelector(".cute-toast-host") as HTMLElement | null;
+		if (!host) {
+			host = document.createElement("div");
+			host.className = "cute-toast-host";
+			host.setAttribute("aria-live", "polite");
+			document.body.appendChild(host);
+		}
+		return host;
+	}
+
+	window.showCuteToast = (message: string, durationMs = 1600) => {
+		const host = ensureHost();
+		const el = document.createElement("div");
+		el.className = "cute-toast";
+		el.textContent = message;
+		host.appendChild(el);
+
+		window.setTimeout(() => {
+			el.classList.add("is-out");
+			window.setTimeout(() => el.remove(), 260);
+		}, durationMs);
+	};
+
+	document.addEventListener("cute-toast", ((e: CustomEvent<{ message?: string }>) => {
+		window.showCuteToast?.(e.detail?.message || "搞定啦～");
+	}) as EventListener);
+</script>

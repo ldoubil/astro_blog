@@ -1,0 +1,67 @@
+---
+---
+
+<style is:global>
+	.click-fx {
+		position: fixed;
+		left: 0;
+		top: 0;
+		pointer-events: none;
+		z-index: 9998;
+		font-size: 14px;
+		line-height: 1;
+		user-select: none;
+		will-change: transform, opacity;
+		animation: click-fx-rise 0.85s ease-out forwards;
+	}
+
+	@keyframes click-fx-rise {
+		0% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% - 56px))
+				scale(1.15) rotate(var(--rot, 12deg));
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.click-fx {
+			display: none !important;
+		}
+	}
+</style>
+
+<script>
+	const SYMBOLS = ["♡", "✦", "❀", "★", "✧"];
+	let lastAt = 0;
+
+	function spawn(x: number, y: number) {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		const now = performance.now();
+		if (now - lastAt < 40) return;
+		lastAt = now;
+
+		const el = document.createElement("span");
+		el.className = "click-fx";
+		el.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+		el.style.left = `${x}px`;
+		el.style.top = `${y}px`;
+		el.style.color = "var(--primary)";
+		el.style.setProperty("--dx", `${(Math.random() - 0.5) * 36}px`);
+		el.style.setProperty("--rot", `${(Math.random() - 0.5) * 40}deg`);
+		document.body.appendChild(el);
+		el.addEventListener("animationend", () => el.remove(), { once: true });
+	}
+
+	document.addEventListener(
+		"pointerup",
+		(e: PointerEvent) => {
+			if (e.pointerType === "mouse" && e.button !== 0) return;
+			spawn(e.clientX, e.clientY);
+		},
+		{ passive: true },
+	);
+</script>

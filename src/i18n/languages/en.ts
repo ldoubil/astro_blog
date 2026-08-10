@@ -5,6 +5,7 @@ export const en: Translation = {
   [Key.home]: 'Home',
   [Key.about]: 'About',
   [Key.archive]: 'Archive',
+  [Key.friends]: 'Friends',
   [Key.search]: 'Search',
 
   [Key.tags]: 'Tags',
@@ -36,4 +37,18 @@ export const en: Translation = {
   [Key.author]: 'Author',
   [Key.publishedAt]: 'Published at',
   [Key.license]: 'License',
+
+  [Key.friendsEmpty]: 'No friend links yet.',
+  [Key.notFound]: 'Page not found',
+  [Key.notFoundHint]: 'This page wandered off. Head back home?',
+  [Key.backHome]: 'Back to Home',
+  [Key.backToArchive]: 'Back to Archive',
+  [Key.searchDevHint]: 'Search unavailable in dev',
+  [Key.searchDevHintDetail]: 'Run npm run build && npm run preview to try search.',
+  [Key.moments]: 'Updates',
+  [Key.momentsEmpty]: 'No updates yet.',
+  [Key.siteUptime]: 'Running for {days} days',
+  [Key.rss]: 'RSS',
+  [Key.toc]: 'Contents',
+  [Key.fortune]: 'Daily Fortune',
 }

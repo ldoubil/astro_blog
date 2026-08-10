@@ -6,6 +6,9 @@ export type SiteConfig = {
 
   lang: string
 
+  /** ISO date when the site launched, used for uptime display */
+  siteStartDate: string
+
   themeColor: {
     hue: number
     fixed: boolean
@@ -38,6 +41,21 @@ export enum LinkPreset {
   Home = 0,
   Archive = 1,
   About = 2,
+  Friends = 3,
+  Moments = 4,
+}
+
+export type FriendLink = {
+  name: string
+  url: string
+  avatar?: string
+  description?: string
+}
+
+export type FriendsConfig = {
+  title?: string
+  description?: string
+  links: FriendLink[]
 }
 
 export type NavBarLink = {

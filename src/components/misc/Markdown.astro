@@ -64,6 +64,7 @@ const className = Astro.props.class;
         if (text === undefined) return;
         await navigator.clipboard.writeText(text);
         copyButton.classList.add("success");
+        window.showCuteToast?.("代码已复制喵~");
         timeout = setTimeout(() => {
           copyButton.classList.remove("success");
         }, 1000);

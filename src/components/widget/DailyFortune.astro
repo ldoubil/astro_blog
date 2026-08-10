@@ -1,0 +1,51 @@
+---
+import { Icon } from 'astro-icon/components'
+import WidgetLayout from './WidgetLayout.astro'
+import I18nKey from '../../i18n/i18nKey'
+import { i18n } from '../../i18n/translation'
+
+interface Props {
+  class?: string
+  style?: string
+}
+const className = Astro.props.class
+const style = Astro.props.style
+
+const fortunes = [
+  { sign: '大吉', tip: '今日诸事顺遂，适合动手做一直想做的事。' },
+  { sign: '中吉', tip: '平稳推进就好，小进展也值得开心一下。' },
+  { sign: '小吉', tip: '运气偏暖，遇到好事记得收下。' },
+  { sign: '吉', tip: '宜整理与复盘，把乱线理顺会轻松许多。' },
+  { sign: '末吉', tip: '别着急，慢慢走也会到想去的地方。' },
+  { sign: '半吉', tip: '先照顾好自己，再回应外界的喧哗。' },
+  { sign: '平', tip: '平淡也是礼物，喝杯水看看窗外吧。' },
+  { sign: '小凶', tip: '先别硬刚，歇一口气再出发会更稳。' },
+]
+
+function dailyIndex(listLen: number) {
+  const d = new Date()
+  const key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()
+  let h = key
+  h = ((h >>> 16) ^ h) * 0x45d9f3b
+  h = ((h >>> 16) ^ h) * 0x45d9f3b
+  h = (h >>> 16) ^ h
+  return Math.abs(h) % listLen
+}
+
+const fortune = fortunes[dailyIndex(fortunes.length)]
+---
+
+<WidgetLayout name={i18n(I18nKey.fortune)} id="fortune" class={className} style={style}>
+  <div class="px-1 py-0.5">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="inline-flex items-center justify-center rounded-lg px-2.5 py-1 text-sm font-bold
+        bg-[var(--btn-regular-bg)] text-[var(--btn-content)]">
+        {fortune.sign}
+      </span>
+      <Icon name="material-symbols:auto-awesome-outline-rounded" class="text-[1.1rem] text-[var(--primary)]" />
+    </div>
+    <p class="text-sm text-black/55 dark:text-white/55 leading-relaxed">
+      {fortune.tip}
+    </p>
+  </div>
+</WidgetLayout>

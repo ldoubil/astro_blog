@@ -1,5 +1,7 @@
 ---
 import { getPostUrlBySlug } from '@utils/url-utils'
+import type { HomeFeedItem } from '../utils/content-utils'
+import MomentCard from './MomentCard.astro'
 import PostCard from './PostCard.astro'
 
 const { page } = Astro.props
@@ -8,7 +10,19 @@ let delay = 0
 const interval = 50
 ---
 <div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
-    {page.data.map((entry: { data: { draft: boolean; title: string; tags: string[]; category: string; published: Date; image: string; description: string; updated: Date; }; slug: string; }) => {
+    {page.data.map((item: HomeFeedItem) => {
+        if (item.type === 'moment') {
+            return (
+                <MomentCard
+                    entry={item.entry}
+                    published={item.published}
+                    class:list="onload-animation"
+                    style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+                />
+            )
+        }
+
+        const entry = item.entry
         return (
             <PostCard
                     entry={entry}

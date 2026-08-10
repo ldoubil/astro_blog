@@ -3,16 +3,32 @@ import type { BlogPostData } from '@/types/config'
 import I18nKey from '@i18n/i18nKey'
 import { i18n } from '@i18n/translation'
 
-export async function getSortedPosts(): Promise<
-  { body?: string; data: BlogPostData; id: string; slug: string }[]
-> {
+export type SortedPost = {
+  body?: string
+  data: BlogPostData
+  id: string
+  slug: string
+}
+
+export type SortedMoment = {
+  body?: string
+  data: { published: Date; draft?: boolean }
+  id: string
+  slug: string
+}
+
+export type HomeFeedItem =
+  | { type: 'post'; published: Date; entry: SortedPost }
+  | { type: 'moment'; published: Date; entry: SortedMoment }
+
+export async function getSortedPosts(): Promise<SortedPost[]> {
   const allBlogPosts = (await getCollection('posts', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true
   })).map(post => ({
     ...post,
     // Keep slug alias for existing callers (Content Layer uses id)
     slug: post.id,
-  })) as unknown as { body?: string; data: BlogPostData; id: string; slug: string }[]
+  })) as unknown as SortedPost[]
 
   const sorted = allBlogPosts.sort(
     (a: { data: BlogPostData }, b: { data: BlogPostData }) => {
@@ -32,6 +48,43 @@ export async function getSortedPosts(): Promise<
   }
 
   return sorted
+}
+
+export async function getSortedMoments(): Promise<SortedMoment[]> {
+  const moments = (await getCollection('moments', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true
+  })).map(moment => ({
+    ...moment,
+    slug: moment.id,
+  })) as unknown as SortedMoment[]
+
+  return moments.sort(
+    (a, b) =>
+      new Date(b.data.published).valueOf() - new Date(a.data.published).valueOf(),
+  )
+}
+
+/** Homepage timeline: posts + moments, newest first */
+export async function getHomeFeed(): Promise<HomeFeedItem[]> {
+  const [posts, moments] = await Promise.all([
+    getSortedPosts(),
+    getSortedMoments(),
+  ])
+
+  const feed: HomeFeedItem[] = [
+    ...posts.map(entry => ({
+      type: 'post' as const,
+      published: new Date(entry.data.published),
+      entry,
+    })),
+    ...moments.map(entry => ({
+      type: 'moment' as const,
+      published: new Date(entry.data.published),
+      entry,
+    })),
+  ]
+
+  return feed.sort((a, b) => b.published.valueOf() - a.published.valueOf())
 }
 
 export type Tag = {

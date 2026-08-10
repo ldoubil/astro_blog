@@ -26,6 +26,28 @@ export function setHue(hue: number): void {
   r.style.setProperty('--hue', String(hue))
 }
 
+function willBeDark(theme: LIGHT_DARK_MODE): boolean {
+  if (theme === DARK_MODE) return true
+  if (theme === LIGHT_MODE) return false
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+function playThemeTransition(goingDark: boolean) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const existing = document.querySelector('.theme-fx')
+  existing?.remove()
+
+  const root = document.createElement('div')
+  root.className = `theme-fx ${goingDark ? 'is-dark' : 'is-light'}`
+  root.innerHTML = `
+    <div class="theme-fx-veil" aria-hidden="true"></div>
+    <div class="theme-fx-blob" aria-hidden="true">${goingDark ? '☾' : '☀'}</div>
+  `
+  document.body.appendChild(root)
+  window.setTimeout(() => root.remove(), 800)
+}
+
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
   switch (theme) {
     case LIGHT_MODE:
@@ -44,9 +66,19 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
   }
 }
 
-export function setTheme(theme: LIGHT_DARK_MODE): void {
+export function setTheme(theme: LIGHT_DARK_MODE, animate = true): void {
+  const beforeDark = document.documentElement.classList.contains('dark')
+  const afterDark = willBeDark(theme)
+
   localStorage.setItem('theme', theme)
-  applyThemeToDocument(theme)
+
+  if (animate && beforeDark !== afterDark) {
+    playThemeTransition(afterDark)
+    // Apply mid-animation so the veil matches the destination
+    window.setTimeout(() => applyThemeToDocument(theme), 180)
+  } else {
+    applyThemeToDocument(theme)
+  }
 }
 
 export function getStoredTheme(): LIGHT_DARK_MODE {

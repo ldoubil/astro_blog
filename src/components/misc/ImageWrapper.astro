@@ -51,11 +51,11 @@ const imageStyle = `object-position: ${position}`;
 
 <div id={id} class:list={[className, "overflow-hidden relative img-wrapper"]}>
     <div
-        class="img-skeleton absolute inset-0 z-[1] pointer-events-none overflow-hidden bg-[var(--btn-regular-bg)]"
+        class="img-skeleton absolute inset-0 z-[1] pointer-events-none overflow-hidden"
         aria-hidden="true"
     >
         <div
-            class="absolute inset-0 -translate-x-full animate-[img-shimmer_1.4s_infinite] bg-gradient-to-r from-transparent via-white/40 dark:via-white/10 to-transparent"
+            class="absolute inset-0 -translate-x-full animate-[img-shimmer_1.6s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-[color-mix(in_oklch,var(--primary)_22%,transparent)] to-transparent"
         >
         </div>
     </div>
@@ -93,6 +93,14 @@ const imageStyle = `object-position: ${position}`;
         100% {
             transform: translateX(100%);
         }
+    }
+
+    .img-skeleton {
+        background: color-mix(in oklch, var(--btn-regular-bg) 82%, var(--primary));
+    }
+
+    :is(html.dark) .img-skeleton {
+        background: color-mix(in oklch, var(--btn-regular-bg) 88%, var(--primary));
     }
 
     .img-wrapper.is-loaded .img-skeleton {

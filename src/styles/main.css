@@ -4,6 +4,19 @@
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
     }
+    .sidebar-card {
+        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+        border: 1px solid color-mix(in oklch, var(--primary) 10%, transparent);
+        box-shadow:
+            0 1px 2px color-mix(in oklch, black 4%, transparent),
+            0 6px 18px color-mix(in oklch, black 3%, transparent);
+    }
+    :is(html.dark) .sidebar-card {
+        border-color: color-mix(in oklch, white 7%, transparent);
+        box-shadow:
+            0 0 0 1px color-mix(in oklch, white 3%, transparent),
+            0 8px 24px color-mix(in oklch, black 28%, transparent);
+    }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
     }
