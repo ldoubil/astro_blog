@@ -41,7 +41,8 @@ pnpm new-post 文件名
 ## 二级标题
 ### 三级标题
 ```
-
+![[about]]
+![[Screenshot_2026-08-10-20-15-08-346_fan.astral.next.game.jpg]]
 ### 强调与行内
 
 ```md
