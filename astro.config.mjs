@@ -10,6 +10,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeComponents from "rehype-components"; /* Render the custom directive content */
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
+import remarkBreaks from "remark-breaks";
 import remarkDirective from "remark-directive"; /* Handle directives */
 import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
 import remarkMath from "remark-math";
@@ -22,6 +23,7 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 import { LinkCardComponent } from "./src/plugins/rehype-component-link-card.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
+import { remarkObsidianWiki } from "./src/plugins/remark-obsidian-wiki.mjs";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import react from "@astrojs/react";
 
@@ -76,6 +78,7 @@ export default defineConfig({
     // Keep remark/rehype plugins on the unified pipeline (Astro 7 default is Sätteri)
     processor: unified({
       remarkPlugins: [
+        remarkObsidianWiki,
         remarkMath,
         remarkReadingTime,
         remarkExcerpt,
@@ -83,6 +86,7 @@ export default defineConfig({
         remarkDirective,
         remarkSectionize,
         parseDirectiveNode,
+        remarkBreaks,
       ],
       rehypePlugins: [
         rehypeKatex,
