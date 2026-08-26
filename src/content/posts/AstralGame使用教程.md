@@ -1,5 +1,5 @@
 ---
-title: MC联机教程
+title: AstralGame使用教程
 published: 2026-08-24T20:03:00.000Z
 description: AstralGame 游戏联机工具从零上手
 image: ''

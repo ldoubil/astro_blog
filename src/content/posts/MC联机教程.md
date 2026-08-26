@@ -2,7 +2,7 @@
 title: MC联机教程
 published: 2026-08-24T20:03:00.000Z
 description: AstralGame 游戏联机工具从零上手：MC联机从入门到入土，带你品鉴MC的特色联机风味
-image: ../../assets/images/MC联机教程封面.png
+image: "../../assets/images/MC联机教程封面.png"
 tags: [教程, AstralGame, 联机, MC, minecraft]
 category: AstralGame
 draft: false
