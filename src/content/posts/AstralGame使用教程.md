@@ -1,8 +1,8 @@
 ---
-title: MC联机教程
+title: AstralGame 使用教程
 published: 2026-08-26T20:03:00.000Z
 description: AstralGame 游戏联机工具从零上手
-image: ''
+image: ../../assets/images/AstralGame使用教程/ASG教程封面.png
 tags: [教程, AstralGame]
 category: AstralGame
 draft: false
@@ -14,7 +14,7 @@ lang: zh_CN
 :::
 
 :::warning
-astral的代码完全开源，但因为没给杀毒软件交保护费（也没有大哥罩着），所以安装前为了避免杀毒软件误杀astral，请将astral放入杀毒软件白名单中
+astral的代码完全开源，但因为没给杀毒软件交保护费（也没有大哥罩着），所以安装前为了避免杀毒软件误杀astral，请将**astral安装包和根目录**放入杀毒软件白名单中
 :::
 
 ## 目录
